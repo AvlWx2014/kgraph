@@ -1,5 +1,7 @@
 package kgraph
 
+typealias MutableDigraph<V, E> = MutableDirectedGraph<V, E>
+
 class MutableDirectedGraph<V : Any, E : Any> : DirectedGraph<V, E>(), MutableGraph<V, E> {
 
     override fun addVertex(vertex: Vertex<V>): Boolean {

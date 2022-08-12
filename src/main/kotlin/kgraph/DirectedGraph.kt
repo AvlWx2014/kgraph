@@ -1,5 +1,7 @@
 package kgraph
 
+typealias Digraph<V, E> = DirectedGraph<V, E>
+
 open class DirectedGraph<V : Any, E : Any> : Graph<V, E> {
 
     internal val vertexMap = mutableMapOf<Vertex<V>, Vertex<V>>()
