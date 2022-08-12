@@ -104,3 +104,9 @@ fun <V : Any, E : Any> DirectedGraph<V, E>.dfs(target: Vertex<V>?): DfsResult<Ve
 
     return result
 }
+
+/**
+ * Detect cycles in a directed graph using depth-first search.
+ */
+@Experimental
+fun DirectedGraph<*, *>.detectCycles(): Boolean = dfs(null) is DfsResult.CycleDetected
