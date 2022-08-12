@@ -2,7 +2,12 @@ package kgraph
 
 typealias Digraph<V, E> = DirectedGraph<V, E>
 
-open class DirectedGraph<V : Any, E : Any> : Graph<V, E> {
+fun <V: Any, E: Any> buildDigraph(block: MutableDirectedGraph<V, E>.() -> Unit) = buildDirectedGraph(block)
+fun <V: Any, E: Any> buildDirectedGraph(block: MutableDirectedGraph<V, E>.() -> Unit): DirectedGraph<V, E> {
+    return MutableDirectedGraph<V, E>().apply(block)
+}
+
+open class DirectedGraph<V : Any, E : Any> internal constructor() : Graph<V, E> {
 
     internal val vertexMap = mutableMapOf<Vertex<V>, Vertex<V>>()
     override val vertices: Collection<Vertex<V>>
