@@ -22,3 +22,12 @@ open class DirectedGraph<V : Any, E : Any> : Graph<V, E> {
         return inDegree + outDegree
     }
 }
+
+fun <V: Any, E : Any> DirectedGraph<V, E>.inDegree(vertex: Vertex<V>) = vertex.inDegree()
+fun <V: Any, E : Any> DirectedGraph<V, E>.outDegree(vertex: Vertex<V>) = vertex.outDegree()
+
+fun <V : Any, E : Any> DirectedGraph<V, E>.sources(): Collection<Vertex<V>> = roots()
+fun <V : Any, E : Any> DirectedGraph<V, E>.roots(): Collection<Vertex<V>> = vertices.filter { this.inDegree(it) == 0 }
+
+fun <V : Any, E : Any> DirectedGraph<V, E>.sinks(): Collection<Vertex<V>> = leaves()
+fun <V : Any, E : Any> DirectedGraph<V, E>.leaves(): Collection<Vertex<V>> = vertices.filter { this.outDegree(it) == 0 }
