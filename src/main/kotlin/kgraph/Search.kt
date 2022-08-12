@@ -110,3 +110,39 @@ fun <V : Any, E : Any> DirectedGraph<V, E>.dfs(target: Vertex<V>?): DfsResult<Ve
  */
 @Experimental
 fun DirectedGraph<*, *>.detectCycles(): Boolean = dfs(null) is DfsResult.CycleDetected
+
+@Experimental
+fun <V : Any, E : Any> DirectedGraph<V, E>.depthFirstPaths(): List<List<Edge<V, E>>> {
+    check(!detectCycles()) {
+        "Depth-first traversal cannot be performed, cycle detected."
+    }
+
+    // create an easy edge-lookup mechanism
+    // these setup steps take O(max(V, E)) since
+    // vertices.associateWith is O(V) and
+    // edges.forEach is O(E)
+    val edgeLookup = vertices.associateWith { mutableMapOf<Vertex<V>, Edge<V, E>>() }
+    edges.forEach {
+        // not-null assertion is acceptable here as we just
+        // ensured that each vertex has a non-null mapping to
+        // an empty MutableMap<Vertex<V>, Edge<V, E>> instance
+        edgeLookup[it.u]!![it.v] = it
+    }
+
+    val paths = mutableListOf<List<Edge<V, E>>>()
+
+    fun visit(u: Vertex<V>, queue: List<Edge<V, E>>) {
+        val neighborhood = edgeLookup[u] ?: error("Vertex -> Edge mapping has null value for $u")
+        if (neighborhood.isEmpty()) {
+            paths.add(queue)
+        } else {
+            neighborhood.forEach { (v, e) ->
+                visit(v, queue + e)
+            }
+        }
+    }
+
+    roots().forEach { visit(it, emptyList()) }
+
+    return paths
+}
